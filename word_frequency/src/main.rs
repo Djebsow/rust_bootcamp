@@ -3,7 +3,10 @@ use std::collections::HashMap;
 use std::io::{self, Read};
 
 #[derive(Parser, Debug)]
-#[command(name = "wordfreq", about = "Compte la fréquence des mots dans un texte")]
+#[command(
+    name = "wordfreq",
+    about = "Compte la fréquence des mots dans un texte"
+)]
 struct Args {
     /// Texte à analyser (si absent, lit depuis l'entrée standard)
     text: Option<String>,
@@ -37,11 +40,13 @@ fn main() {
     let mut counts = HashMap::new();
 
     // On sépare le texte en mots en ignorant tout ce qui n'est pas alphanumérique
-    for word in content.split(|c: char| !c.is_alphanumeric())
-        .filter(|s| !s.is_empty()) // On enlève les chaînes vides
+    for word in content
+        .split(|c: char| !c.is_alphanumeric())
+        .filter(|s| !s.is_empty())
+    // On enlève les chaînes vides
     {
         let mut processed_word = word.to_string();
-        
+
         // Gestion de la casse (ignore_case)
         if args.ignore_case {
             processed_word = processed_word.to_lowercase();
@@ -56,12 +61,10 @@ fn main() {
     // 3. Transformation en Vecteur pour le tri
     let mut sorted_counts: Vec<_> = counts.into_iter().collect();
 
-    // LOGIQUE DE TRI : 
+    // LOGIQUE DE TRI :
     // On trie d'abord par fréquence (b.1.cmp(&a.1) -> ordre décroissant)
     // Puis par ordre alphabétique en cas d'égalité (a.0.cmp(&b.0))
-    sorted_counts.sort_by(|a, b| {
-        b.1.cmp(&a.1).then_with(|| a.0.cmp(&b.0))
-    });
+    sorted_counts.sort_by(|a, b| b.1.cmp(&a.1).then_with(|| a.0.cmp(&b.0)));
 
     // 4. Affichage des résultats (limité par l'argument --top)
     for (word, count) in sorted_counts.into_iter().take(args.top) {
