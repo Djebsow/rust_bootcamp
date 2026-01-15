@@ -20,14 +20,14 @@ fn main() {
     let args = Args::parse();
 
     // Gestion de la mise en majuscules (Ownership)
-    let mut display_name = args.name; // c'est une string pour déplacer la donnée vers la variable display_name. On la rend mut pour possible modification
+    let mut message = format!("Hello, {}!",args.name); // c'est une string pour déplacer la donnée vers la variable display_name. On la rend mut pour possible modification
 
     if args.upper {
-        display_name = display_name.to_uppercase();
+        message = message.to_uppercase();
     }
 
     // Boucle pour la répétition
     for _ in 0..args.repeat {
-        println!("Hello, {}!", display_name);
+        println!("{}", message);
     }
 }
